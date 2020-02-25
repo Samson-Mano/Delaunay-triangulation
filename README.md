@@ -1,6 +1,8 @@
-# Delaunay_triangulation_divide_n_conquer_1
+# Delaunay_triangulation_divide_n_conquer
 This is a C# implementation of Divide and conquer Delaunay triangulation. The implementation follows Guibas and Stolfi’s paper.  This is the vertical cut implementation of divide and conquer.<br />
-
+![](Images/edge_1000pts.png)
+![](Images/edge_1000pts_faces.png)
+![](/Images/edge_1000pts_incircle.png)
 # References
 •	Primitives for the manipulation of general subdivisions and the computation of Voronoi diagrams", ACM Transactions on Graphics, 4(2), 1985, 75–123
 http://www.sccg.sk/~samuelcik/dgs/quad_edge.pdf
