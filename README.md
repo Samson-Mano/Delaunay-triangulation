@@ -1,25 +1,25 @@
 # Delaunay_triangulation_divide_n_conquer
-This is a C# implementation of Divide and conquer Delaunay triangulation. The implementation follows Guibas and Stolfi’s paper.  This is the vertical cut implementation of divide and conquer.<br />
+This is a C# implementation of Divide and conquer Delaunay triangulation. The implementation follows Guibas and Stolfi’s paper.  This is the vertical cut implementation of divide and conquer.<br /><br />The explaination of algorithm is shown in<br /> https://sites.google.com/site/samsoninfinite/multivariable-calculus/delaunay-triangulation <br /><br />
 ![](Images/edge_1000pts.png)
 ![](Images/edge_1000pts_faces.png)
 ![](/Images/edge_1000pts_incircle.png)
 # References
-•	Primitives for the manipulation of general subdivisions and the computation of Voronoi diagrams", ACM Transactions on Graphics, 4(2), 1985, 75–123
+•	Primitives for the manipulation of general subdivisions and the computation of Voronoi diagrams", ACM Transactions on Graphics, 4(2), 1985, 75–123<br />
 http://www.sccg.sk/~samuelcik/dgs/quad_edge.pdf
 
 •	Dwyer, R.A., A faster divide-and-conquer algorithm for constructing
-Delaunay triangulations. Algorithmica 2(2):137-151, 1987.
+Delaunay triangulations. Algorithmica 2(2):137-151, 1987.<br />
 https://github.com/rexdwyer/DelaunayTriangulation/blob/master/common.c
 
-•	Lecture Notes on Delaunay Mesh Generation
-Jonathan Richard Shewchuk
+•	Lecture Notes on Delaunay Mesh Generation<br />
+Jonathan Richard Shewchuk<br />
 http://web.mit.edu/ehliu/Public/ProjectX/Summer2005/delnotes.pdf
 
-•	Triangle: Engineering a 2D Quality Mesh Generator and Delaunay Triangulator
+•	Triangle: Engineering a 2D Quality Mesh Generator and Delaunay Triangulator<br />
 https://people.eecs.berkeley.edu/~jrs/papers/triangle.pdf
 http://www.geom.uiuc.edu/~samuelp/del_project.html
 
-•	Other
+•	Other<br />
 http://www.neolithicsphere.com/geodesica/doc/quad_edge_overview.htm
 https://cp-algorithms.com/geometry/delaunay.html
 http://www.karlchenofhell.org/cppswp/lischinski.pdf
