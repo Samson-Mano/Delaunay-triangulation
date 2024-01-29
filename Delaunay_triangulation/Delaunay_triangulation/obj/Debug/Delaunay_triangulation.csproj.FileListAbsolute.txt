@@ -7,6 +7,7 @@ C:\Users\Mighty_Owl\source\repos\Delaunay_triangulation\Delaunay_triangulation\o
 C:\Users\Mighty_Owl\source\repos\Delaunay_triangulation\Delaunay_triangulation\obj\Debug\Delaunay_triangulation.exe
 C:\Users\Mighty_Owl\source\repos\Delaunay_triangulation\Delaunay_triangulation\obj\Debug\Delaunay_triangulation.pdb
 C:\Users\Mighty_Owl\source\repos\Delaunay_triangulation\Delaunay_triangulation\obj\Debug\Delaunay_triangulation.Form1.resources
+<<<<<<< HEAD
 C:\Users\HFXMSZ\Source\Repos\Samson-Mano\Delaunay-triangulation\Delaunay_triangulation\Delaunay_triangulation\bin\Debug\Delaunay_triangulation.exe.config
 C:\Users\HFXMSZ\Source\Repos\Samson-Mano\Delaunay-triangulation\Delaunay_triangulation\Delaunay_triangulation\bin\Debug\Delaunay_triangulation.exe
 C:\Users\HFXMSZ\Source\Repos\Samson-Mano\Delaunay-triangulation\Delaunay_triangulation\Delaunay_triangulation\bin\Debug\Delaunay_triangulation.pdb
@@ -18,3 +19,15 @@ C:\Users\HFXMSZ\Source\Repos\Samson-Mano\Delaunay-triangulation\Delaunay_triangu
 C:\Users\HFXMSZ\Source\Repos\Samson-Mano\Delaunay-triangulation\Delaunay_triangulation\Delaunay_triangulation\obj\Debug\Delaunay_triangulation.csproj.CoreCompileInputs.cache
 C:\Users\HFXMSZ\Source\Repos\Samson-Mano\Delaunay-triangulation\Delaunay_triangulation\Delaunay_triangulation\obj\Debug\Delaunay_triangulation.exe
 C:\Users\HFXMSZ\Source\Repos\Samson-Mano\Delaunay-triangulation\Delaunay_triangulation\Delaunay_triangulation\obj\Debug\Delaunay_triangulation.pdb
+=======
+E:\project repo\Delaunay-triangulation\Delaunay_triangulation\Delaunay_triangulation\bin\Debug\Delaunay_triangulation.exe.config
+E:\project repo\Delaunay-triangulation\Delaunay_triangulation\Delaunay_triangulation\bin\Debug\Delaunay_triangulation.exe
+E:\project repo\Delaunay-triangulation\Delaunay_triangulation\Delaunay_triangulation\bin\Debug\Delaunay_triangulation.pdb
+E:\project repo\Delaunay-triangulation\Delaunay_triangulation\Delaunay_triangulation\obj\Debug\Delaunay_triangulation.csproj.AssemblyReference.cache
+E:\project repo\Delaunay-triangulation\Delaunay_triangulation\Delaunay_triangulation\obj\Debug\Delaunay_triangulation.Form1.resources
+E:\project repo\Delaunay-triangulation\Delaunay_triangulation\Delaunay_triangulation\obj\Debug\Delaunay_triangulation.Properties.Resources.resources
+E:\project repo\Delaunay-triangulation\Delaunay_triangulation\Delaunay_triangulation\obj\Debug\Delaunay_triangulation.csproj.GenerateResource.cache
+E:\project repo\Delaunay-triangulation\Delaunay_triangulation\Delaunay_triangulation\obj\Debug\Delaunay_triangulation.csproj.CoreCompileInputs.cache
+E:\project repo\Delaunay-triangulation\Delaunay_triangulation\Delaunay_triangulation\obj\Debug\Delaunay_triangulation.exe
+E:\project repo\Delaunay-triangulation\Delaunay_triangulation\Delaunay_triangulation\obj\Debug\Delaunay_triangulation.pdb
+>>>>>>> 98d0d699ab8f8b6fb7d2e0f8a3352d6046f80323
