@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.IO;
 
 namespace Delaunay_triangulation
 {
@@ -260,6 +261,27 @@ namespace Delaunay_triangulation
                     }
                 }
 
+                public int get_p1_id
+                {
+                    get
+                    {
+                        return _p1.id;
+                    }
+                }
+                public int get_p2_id
+                {
+                    get
+                    {
+                        return _p2.id;
+                    }
+                }
+                public int get_p3_id
+                {
+                    get
+                    {
+                        return _p3.id;
+                    }
+                }
                 public face2d(int i_face_id, point2d i_p1, point2d i_p2, point2d i_p3)
                 {
                     this._face_id = i_face_id;
@@ -391,6 +413,7 @@ namespace Delaunay_triangulation
             }
 
             mt_pic.Refresh();// Refresh the paint region
+            
         }
 
         private void timer1_Tick(object sender, EventArgs e)
@@ -421,15 +444,12 @@ namespace Delaunay_triangulation
         public void generate_random_points(int inpt_point_count, int x_coord_limit, int y_coord_limit)
         {
             main_drw_obj = new planar_object_store(); // reinitialize the all the lists
-
-            List<planar_object_store.point2d> temp_pt_list = new List<planar_object_store.point2d>(); // create a temporary list to store the points
-                                                                                                      // !!!!!!!!!!!! Need major improvements below - very slow to generate unique n random points !!!!!!!!!!!!!!!!!!!!!!!!!!!
+            List<planar_object_store.point2d> temp_pt_list = new List<planar_object_store.point2d>(); // create a temporary list to store the points                                                                                                     // !!!!!!!!!!!! Need major improvements below - very slow to generate unique n random points !!!!!!!!!!!!!!!!!!!!!!!!!!!
             int point_count = inpt_point_count;
             do
             {
                 for (int i = 0; i < point_count; i++) // Loop thro' the point count
                 {
-
                     planar_object_store.point2d temp_pt; // temp_pt to store the intermediate random points
                     PointF rand_pt = new PointF(rand0.Next(-x_coord_limit, x_coord_limit),
                                  rand0.Next(-y_coord_limit, y_coord_limit));
@@ -438,20 +458,36 @@ namespace Delaunay_triangulation
                 }
 
                 temp_pt_list = temp_pt_list.Distinct(new planar_object_store.points_equality_comparer()).ToList();
-
-
                 point_count = inpt_point_count - temp_pt_list.Count;
-
             } while (point_count != 0);
-
             // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
             // copy to the main list
             main_drw_obj.all_points = temp_pt_list;
             // List<PointF> temp_rand_pts = Enumerable.Range(0,point_count).Select(obj => the_static_class.random_point(-x_coord_limit, x_coord_limit,-y_coord_limit, y_coord_limit)).ToList();
-
-
         }
+        public void generate_file_points(float[] points, int x_coord_limit, int y_coord_limit)
+        {
+            main_drw_obj = new planar_object_store(); // reinitialize the all the lists
+            List<planar_object_store.point2d> temp_pt_list = new List<planar_object_store.point2d>(); // create a temporary list to store the points                                                                                                     // !!!!!!!!!!!! Need major improvements below - very slow to generate unique n random points !!!!!!!!!!!!!!!!!!!!!!!!!!!
+            int point_count = points.Length/2;
+            do
+            {
+                for (int i = 0; i < point_count; i++) // Loop thro' the point count
+                {
+                    planar_object_store.point2d temp_pt; // temp_pt to store the intermediate random points
+                    PointF rand_pt = new PointF(points[(2*i)], points[(2*i) + 1]);
+                    temp_pt = new planar_object_store.point2d(i, rand_pt.X , rand_pt.Y );
+                    temp_pt_list.Add(temp_pt); // add to the temp list
+                }
 
+                temp_pt_list = temp_pt_list.Distinct(new planar_object_store.points_equality_comparer()).ToList();
+                point_count = points.Length / 2 - temp_pt_list.Count;
+            } while (point_count != 0);
+            // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+            // copy to the main list
+            main_drw_obj.all_points = temp_pt_list;
+            // List<PointF> temp_rand_pts = Enumerable.Range(0,point_count).Select(obj => the_static_class.random_point(-x_coord_limit, x_coord_limit,-y_coord_limit, y_coord_limit)).ToList();
+        }
         public void initiate_canvas_size()
         {
             // set canvas size and canvas orgin when the form loads and form size changes
@@ -623,6 +659,71 @@ namespace Delaunay_triangulation
 
         #endregion
 
+        private void btnopenDialog_Click(object sender, EventArgs e)
+        {
+            if(openFileDialog1.ShowDialog() == DialogResult.OK)
+            {
+                textfilepath.Text = openFileDialog1.FileName;
+            }
+        }
+
+        private void btnLoadPoints_Click(object sender, EventArgs e)
+        {
+            float scalefactor = 1;
+            float.TryParse(txtScaleFactor.Text, out scalefactor);
+            txtScaleFactor.Text = scalefactor.ToString();
+
+            string path = textfilepath.Text;
+            if (File.Exists(path))
+            {
+                using (StreamReader sr = File.OpenText(path))
+                {
+                    string alltext = sr.ReadToEnd();
+                    alltext = alltext.Replace("\r", "");
+                    alltext = alltext.Replace("\n", "");
+                    string[] pointsstr = alltext.Split(',');
+                    float[] points = new float[pointsstr.Length];
+                    for (int i = 0; i < pointsstr.Length; i++)
+                    {
+                        bool succ = float.TryParse(pointsstr[i],out points[i]);
+                        points[i] = points[i] * scalefactor;
+                        if (!succ)
+                        {
+                            MessageBox.Show("file format is corrupted.");
+                            return;
+                        }
+                    }
+                    generate_file_points(points, (int)10, (int)10);
+                    mt_pic.Refresh();// Refresh the paint region
+                }
+            }
+            else
+            {
+                MessageBox.Show("file doesnt exist");
+            }
+                  }
+
+        private void export_faces()
+        {
+            using (StreamWriter sw = File.CreateText("faces.txt"))
+            {
+                sw.WriteLine("");
+                foreach (var item in main_drw_obj.all_faces)
+                {
+                    sw.Write(item.get_p1_id+1);
+                    sw.Write(",");
+                    sw.Write(item.get_p2_id+1);
+                    sw.Write(",");
+                    sw.WriteLine(item.get_p3_id+1);
+                }
+                MessageBox.Show("faces exported to faces.txt");
+            }
+        }
+
+        private void btnExport_Click(object sender, EventArgs e)
+        {
+            export_faces();
+        }
     }
 
 }
