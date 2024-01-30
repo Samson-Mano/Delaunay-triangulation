@@ -40,8 +40,6 @@
             this.btnopenDialog = new System.Windows.Forms.Button();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.btnExport = new System.Windows.Forms.Button();
-            this.txtScaleFactor = new System.Windows.Forms.TextBox();
-            this.label2 = new System.Windows.Forms.Label();
             this.button_delaunay = new System.Windows.Forms.Button();
             this.checkBox_animate = new System.Windows.Forms.CheckBox();
             this.checkBox_coord = new System.Windows.Forms.CheckBox();
@@ -150,23 +148,6 @@
             this.btnExport.UseVisualStyleBackColor = true;
             this.btnExport.Click += new System.EventHandler(this.btnExport_Click);
             // 
-            // txtScaleFactor
-            // 
-            this.txtScaleFactor.Location = new System.Drawing.Point(762, 40);
-            this.txtScaleFactor.Name = "txtScaleFactor";
-            this.txtScaleFactor.Size = new System.Drawing.Size(57, 23);
-            this.txtScaleFactor.TabIndex = 14;
-            this.txtScaleFactor.Text = "1";
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(680, 43);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(76, 15);
-            this.label2.TabIndex = 13;
-            this.label2.Text = "Scale Factor:";
-            // 
             // button_delaunay
             // 
             this.button_delaunay.Location = new System.Drawing.Point(13, 67);
@@ -226,8 +207,6 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1213, 561);
-            this.Controls.Add(this.txtScaleFactor);
-            this.Controls.Add(this.label2);
             this.Controls.Add(this.btnExport);
             this.Controls.Add(this.btnopenDialog);
             this.Controls.Add(this.btnLoadPoints);
@@ -266,8 +245,6 @@
         private System.Windows.Forms.Button btnopenDialog;
         private System.Windows.Forms.OpenFileDialog openFileDialog1;
         private System.Windows.Forms.Button btnExport;
-        private System.Windows.Forms.TextBox txtScaleFactor;
-        private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Button button_delaunay;
         private System.Windows.Forms.CheckBox checkBox_animate;
         private System.Windows.Forms.CheckBox checkBox_coord;

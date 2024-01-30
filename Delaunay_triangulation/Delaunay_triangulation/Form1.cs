@@ -414,7 +414,7 @@ namespace Delaunay_triangulation
             }
 
             mt_pic.Refresh();// Refresh the paint region
-            
+
         }
 
         private void timer1_Tick(object sender, EventArgs e)
@@ -661,7 +661,7 @@ namespace Delaunay_triangulation
 
         private void btnopenDialog_Click(object sender, EventArgs e)
         {
-            if(openFileDialog1.ShowDialog() == DialogResult.OK)
+            if (openFileDialog1.ShowDialog() == DialogResult.OK)
             {
                 textfilepath.Text = openFileDialog1.FileName;
             }
@@ -669,14 +669,14 @@ namespace Delaunay_triangulation
 
         private void btnLoadPoints_Click(object sender, EventArgs e)
         {
-            float scalefactor = 1;
-            float.TryParse(txtScaleFactor.Text, out scalefactor);
-            txtScaleFactor.Text = scalefactor.ToString();
+            //float scalefactor = 1;
+            //float.TryParse(txtScaleFactor.Text, out scalefactor);
+            //txtScaleFactor.Text = scalefactor.ToString();
 
             string path = textfilepath.Text;
             if (File.Exists(path))
             {
-                List<PointF> points = new List<PointF>();
+                List<PointF> temp_points = new List<PointF>();
 
                 using (StreamReader sr = File.OpenText(path))
                 {
@@ -688,7 +688,7 @@ namespace Delaunay_triangulation
                         {
                             if (float.TryParse(pointStrs[0], out float x) && float.TryParse(pointStrs[1], out float y))
                             {
-                                points.Add( new PointF((x * scalefactor),(y * scalefactor)));
+                                temp_points.Add(new PointF(x, y));
                             }
                             else
                             {
@@ -704,8 +704,37 @@ namespace Delaunay_triangulation
                     }
                 }
 
-                if (points.Count > 2)
+                if (temp_points.Count > 2)
                 {
+                    // Auto scale
+                    // Get the canvas boundary
+                    float canvas_width = (float)(the_static_class.canvas_size.Width * 0.5);
+                    float canvas_height = (float)(the_static_class.canvas_size.Height * 0.5);
+                    float min_canvas_size = Math.Min(canvas_width, canvas_height);
+
+                    // Get the maxXY and minXY
+                    Tuple<PointF, PointF> minmaxXY = findMinMaxXY(temp_points);
+                    PointF geom_center = findGeometricCenter(temp_points);
+
+                    PointF minXY = new PointF( minmaxXY.Item1.X - geom_center.X, minmaxXY.Item1.Y - geom_center.Y);
+                    PointF maxXY = new PointF(minmaxXY.Item2.X - geom_center.X, minmaxXY.Item2.Y - geom_center.Y);
+
+                    float pt_width =  maxXY.X - minXY.X;
+                    float pt_height = maxXY.Y - minXY.Y;
+
+                    float min_drawing_size = Math.Min(pt_width, pt_height);
+
+                    // Get the scale factor
+                    float scale_factor = min_canvas_size / min_drawing_size;
+                    const float epsilon = 0.0001f;
+
+                    List<PointF> points = new List<PointF>();   
+
+                    foreach(PointF pt in temp_points)
+                    {
+                        points.Add(new PointF((pt.X - geom_center.X) * (scale_factor + epsilon), (pt.Y - geom_center.Y) * (scale_factor - epsilon)));  
+                    }
+
                     generate_file_points(points, (int)10, (int)10);
                     mt_pic.Refresh(); // Refresh the paint region
                 }
@@ -720,8 +749,62 @@ namespace Delaunay_triangulation
             }
         }
 
+
+        private Tuple<PointF, PointF> findMinMaxXY(List<PointF> all_pts)
+        {
+            // Initialize min and max values to first node in map
+            PointF firstNode = all_pts[0];
+            PointF minXY = new PointF(firstNode.X, firstNode.Y);
+            PointF maxXY = minXY;
+
+            // Loop through all nodes in map and update min and max values
+            foreach (PointF pt in all_pts)
+            {
+                // Minimum
+                if (pt.X < minXY.X)
+                {
+                    minXY.X = pt.X;
+                }
+                if (pt.Y < minXY.Y)
+                {
+                    minXY.Y = pt.Y;
+                }
+
+                // Maximum
+                if (pt.X > maxXY.X)
+                {
+                    maxXY.X = pt.X;
+                }
+                if (pt.Y > maxXY.Y)
+                {
+                    maxXY.Y = pt.Y;
+                }
+            }
+
+            // Return pair of min and max values
+            return new Tuple<PointF, PointF>(minXY, maxXY);
+        }
+
+
+
+        private PointF findGeometricCenter(List<PointF> all_pts)
+        {
+            // Function returns the geometric center of the nodes
+            // Initialize the sum with zero
+            float sum_X = 0.0f;
+            float sum_Y = 0.0f;
+
+            // Sum the points
+            foreach (PointF pt in all_pts)
+            {
+                sum_X = sum_X + pt.X;
+                sum_Y = sum_Y + pt.Y;
+            }
+            return new PointF(sum_X / all_pts.Count(), sum_Y / all_pts.Count());
+        }
+
         private void export_faces(string filePath)
-{
+        {
             using (StreamWriter sw = File.CreateText(filePath))
             {
                 sw.WriteLine("");
