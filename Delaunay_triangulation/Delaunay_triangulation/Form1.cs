@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO;
+using System.Diagnostics;
 
 namespace Delaunay_triangulation
 {
@@ -465,23 +466,22 @@ namespace Delaunay_triangulation
             main_drw_obj.all_points = temp_pt_list;
             // List<PointF> temp_rand_pts = Enumerable.Range(0,point_count).Select(obj => the_static_class.random_point(-x_coord_limit, x_coord_limit,-y_coord_limit, y_coord_limit)).ToList();
         }
-        public void generate_file_points(float[] points, int x_coord_limit, int y_coord_limit)
+        public void generate_file_points(List<PointF> points, int x_coord_limit, int y_coord_limit)
         {
             main_drw_obj = new planar_object_store(); // reinitialize the all the lists
             List<planar_object_store.point2d> temp_pt_list = new List<planar_object_store.point2d>(); // create a temporary list to store the points                                                                                                     // !!!!!!!!!!!! Need major improvements below - very slow to generate unique n random points !!!!!!!!!!!!!!!!!!!!!!!!!!!
-            int point_count = points.Length/2;
+            int point_count = points.Count;
             do
             {
                 for (int i = 0; i < point_count; i++) // Loop thro' the point count
                 {
                     planar_object_store.point2d temp_pt; // temp_pt to store the intermediate random points
-                    PointF rand_pt = new PointF(points[(2*i)], points[(2*i) + 1]);
-                    temp_pt = new planar_object_store.point2d(i, rand_pt.X , rand_pt.Y );
+                    temp_pt = new planar_object_store.point2d(i, points[i].X, points[i].Y);
                     temp_pt_list.Add(temp_pt); // add to the temp list
                 }
 
                 temp_pt_list = temp_pt_list.Distinct(new planar_object_store.points_equality_comparer()).ToList();
-                point_count = points.Length / 2 - temp_pt_list.Count;
+                point_count = points.Count - temp_pt_list.Count;
             } while (point_count != 0);
             // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
             // copy to the main list
@@ -676,53 +676,78 @@ namespace Delaunay_triangulation
             string path = textfilepath.Text;
             if (File.Exists(path))
             {
+                List<PointF> points = new List<PointF>();
+
                 using (StreamReader sr = File.OpenText(path))
                 {
-                    string alltext = sr.ReadToEnd();
-                    alltext = alltext.Replace("\r", "");
-                    alltext = alltext.Replace("\n", "");
-                    string[] pointsstr = alltext.Split(',');
-                    float[] points = new float[pointsstr.Length];
-                    for (int i = 0; i < pointsstr.Length; i++)
+                    string line;
+                    while ((line = sr.ReadLine()) != null)
                     {
-                        bool succ = float.TryParse(pointsstr[i],out points[i]);
-                        points[i] = points[i] * scalefactor;
-                        if (!succ)
+                        string[] pointStrs = line.Split(',');
+                        if (pointStrs.Length == 2)
                         {
-                            MessageBox.Show("file format is corrupted.");
+                            if (float.TryParse(pointStrs[0], out float x) && float.TryParse(pointStrs[1], out float y))
+                            {
+                                points.Add( new PointF((x * scalefactor),(y * scalefactor)));
+                            }
+                            else
+                            {
+                                MessageBox.Show("Invalid format in line: " + line);
+                                return;
+                            }
+                        }
+                        else
+                        {
+                            MessageBox.Show("Invalid format in line: " + line);
                             return;
                         }
                     }
+                }
+
+                if (points.Count > 2)
+                {
                     generate_file_points(points, (int)10, (int)10);
-                    mt_pic.Refresh();// Refresh the paint region
+                    mt_pic.Refresh(); // Refresh the paint region
+                }
+                else
+                {
+                    MessageBox.Show("No valid points found in the file.");
                 }
             }
             else
             {
-                MessageBox.Show("file doesnt exist");
+                MessageBox.Show("File doesn't exist.");
             }
-                  }
+        }
 
-        private void export_faces()
-        {
-            using (StreamWriter sw = File.CreateText("faces.txt"))
+        private void export_faces(string filePath)
+{
+            using (StreamWriter sw = File.CreateText(filePath))
             {
                 sw.WriteLine("");
                 foreach (var item in main_drw_obj.all_faces)
                 {
-                    sw.Write(item.get_p1_id+1);
+                    sw.Write(item.get_p1_id + 1);
                     sw.Write(",");
-                    sw.Write(item.get_p2_id+1);
+                    sw.Write(item.get_p2_id + 1);
                     sw.Write(",");
-                    sw.WriteLine(item.get_p3_id+1);
+                    sw.WriteLine(item.get_p3_id + 1);
+                    // Add a new line after adding the location of 3 points
                 }
-                MessageBox.Show("faces exported to faces.txt");
+                MessageBox.Show("Faces exported to " + filePath);
             }
         }
 
         private void btnExport_Click(object sender, EventArgs e)
         {
-            export_faces();
+            SaveFileDialog saveFileDialog1 = new SaveFileDialog();
+            saveFileDialog1.Filter = "Text files (*.txt)|*.txt|All files (*.*)|*.*";
+            saveFileDialog1.Title = "Save Faces File";
+            if (saveFileDialog1.ShowDialog() == DialogResult.OK)
+            {
+                string filePath = saveFileDialog1.FileName;
+                export_faces(filePath);
+            }
         }
     }
 
